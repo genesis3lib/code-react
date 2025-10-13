@@ -1,0 +1,84 @@
+{
+  "version": "3.0.0",
+
+  "metadata": {
+    "id": "code-react",
+    "name": "React Frontend",
+    "kind": "code",
+    "layers": ["frontend"],
+    "type": "react",
+    "description": "Modern React application with TypeScript and Vite",
+    "version": "1.0.0",
+    "author": "Genesis Team",
+    "tags": ["react", "typescript", "vite", "frontend"]
+  },
+
+  "fields": [
+    {
+      "key": "reactVersion",
+      "label": "React Version",
+      "type": "select",
+      "options": ["18", "19"],
+      "default": "18",
+      "required": true,
+      "description": "React library version",
+      "category": "build"
+    },
+    {
+      "key": "useTypeScript",
+      "label": "Use TypeScript",
+      "type": "boolean",
+      "default": true,
+      "required": false,
+      "description": "Use TypeScript instead of JavaScript",
+      "category": "build"
+    },
+    {
+      "key": "buildTool",
+      "label": "Build Tool",
+      "type": "select",
+      "options": ["vite", "create-react-app"],
+      "default": "vite",
+      "required": true,
+      "description": "Build tool for the React application",
+      "category": "build"
+    }
+  ],
+
+  "files": [
+    "frontend/App.tsx.mustache",
+    "frontend/main.tsx.mustache",
+    "frontend/index.html.mustache",
+    "frontend/vite.config.ts.mustache",
+    "frontend/tsconfig.json.mustache",
+    "frontend/package.json.mustache"
+  ],
+
+  "dependencies": {
+    "npm": {
+      "dependencies": {
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
+      },
+      "devDependencies": {
+        "@types/react": "^18.2.0",
+        "@types/react-dom": "^18.2.0",
+        "@vitejs/plugin-react": "^4.0.0",
+        "typescript": "^5.0.0",
+        "vite": "^5.0.0"
+      }
+    }
+  },
+
+  "generation": {
+    "files": {
+      "remove": [
+        "src/App.css",
+        "src/index.css"
+      ]
+    },
+    "layers": {
+      "frontend": {}
+    }
+  }
+}
