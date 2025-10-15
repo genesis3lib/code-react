@@ -72,10 +72,7 @@
 
   "generation": {
     "files": {
-      "remove": [
-        "src/App.css",
-        "src/index.css"
-      ]
+      "remove": []
     },
     "layers": {
       "frontend": {}
