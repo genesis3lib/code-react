@@ -13,7 +13,7 @@
     "tags": ["react", "typescript", "vite", "frontend"]
   },
 
-  "fields": [
+  "scaffoldConfigTemplate": [
     {
       "key": "reactVersion",
       "label": "React Version",
@@ -69,6 +69,38 @@
       }
     }
   },
+
+  "runtimeConfigFiles": {
+    "default": "frontend/.env",
+    "env": "frontend/.env.{{env}}"
+  },
+
+  "runtimeConfigTemplate": [
+    {
+      "key": "VITE_APP_NAME",
+      "description": "Application name",
+      "example": "{{projectName}}",
+      "required": true,
+      "secret": false,
+      "targets": ["frontend"]
+    },
+    {
+      "key": "VITE_APP_HOST",
+      "description": "Frontend application URL",
+      "example": "https://{{projectName}}{{envSuffix}}.{{domain}}",
+      "required": true,
+      "secret": false,
+      "targets": ["frontend"]
+    },
+    {
+      "key": "VITE_API_BASE",
+      "description": "Backend API base URL",
+      "example": "https://{{projectName}}-api{{envSuffix}}.{{domain}}",
+      "required": true,
+      "secret": false,
+      "targets": ["frontend"]
+    }
+  ],
 
   "generation": {
     "files": {
