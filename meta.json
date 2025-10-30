@@ -1,24 +1,32 @@
 {
   "version": "3.0.0",
-
   "metadata": {
     "id": "code-react",
     "name": "React Frontend",
     "kind": "code",
-    "layers": ["frontend"],
+    "layers": [
+      "frontend"
+    ],
     "type": "react",
     "description": "Modern React application with TypeScript and Vite",
     "version": "1.0.0",
     "author": "Genesis Team",
-    "tags": ["react", "typescript", "vite", "frontend"]
+    "tags": [
+      "react",
+      "typescript",
+      "vite",
+      "frontend"
+    ]
   },
-
   "scaffoldConfigTemplate": [
     {
       "key": "reactVersion",
       "label": "React Version",
       "type": "select",
-      "options": ["18", "19"],
+      "options": [
+        "18",
+        "19"
+      ],
       "default": "18",
       "required": true,
       "description": "React library version",
@@ -37,23 +45,16 @@
       "key": "buildTool",
       "label": "Build Tool",
       "type": "select",
-      "options": ["vite", "create-react-app"],
+      "options": [
+        "vite",
+        "create-react-app"
+      ],
       "default": "vite",
       "required": true,
       "description": "Build tool for the React application",
       "category": "build"
     }
   ],
-
-  "files": [
-    "frontend/App.tsx.mustache",
-    "frontend/main.tsx.mustache",
-    "frontend/index.html.mustache",
-    "frontend/vite.config.ts.mustache",
-    "frontend/tsconfig.json.mustache",
-    "frontend/package.json.mustache"
-  ],
-
   "dependencies": {
     "npm": {
       "dependencies": {
@@ -69,12 +70,10 @@
       }
     }
   },
-
   "runtimeConfigFiles": {
     "default": "frontend/.env",
     "env": "frontend/.env.{{env}}"
   },
-
   "runtimeConfigTemplate": [
     {
       "key": "VITE_APP_NAME",
@@ -82,7 +81,9 @@
       "example": "{{projectName}}",
       "required": true,
       "secret": false,
-      "targets": ["frontend"]
+      "targets": [
+        "frontend"
+      ]
     },
     {
       "key": "VITE_APP_HOST",
@@ -90,7 +91,9 @@
       "example": "https://{{projectName}}{{envSuffix}}.{{domain}}",
       "required": true,
       "secret": false,
-      "targets": ["frontend"]
+      "targets": [
+        "frontend"
+      ]
     },
     {
       "key": "VITE_API_BASE",
@@ -98,10 +101,11 @@
       "example": "https://{{projectName}}-api{{envSuffix}}.{{domain}}",
       "required": true,
       "secret": false,
-      "targets": ["frontend"]
+      "targets": [
+        "frontend"
+      ]
     }
   ],
-
   "generation": {
     "files": {
       "remove": []
@@ -110,7 +114,6 @@
       "frontend": {}
     }
   },
-
   "gitignore": [
     "# React / Vite / Node.js",
     "node_modules/",
