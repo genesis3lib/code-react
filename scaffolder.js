@@ -95,7 +95,7 @@ function readDirectoryRecursive(dirPath, basePath = '') {
     } else {
       try {
         // Check if file is binary or text
-        const isBinary = /\.(png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$/i.test(item.name);
+        const isBinary = /\.(png|jpg|jpeg|gif|ico|woff|woff2|ttf|eot)$/i.test(item.name);
 
         if (isBinary) {
           // Read binary files as base64
