@@ -5,7 +5,8 @@
     "name": "React Frontend",
     "kind": "code",
     "layers": [
-      "frontend"
+      "frontend",
+      "cicd"
     ],
     "type": "react",
     "description": "Modern React application with TypeScript and Vite",
@@ -111,7 +112,8 @@
       "remove": []
     },
     "layers": {
-      "frontend": {}
+      "frontend": {},
+      "cicd": {}
     }
   },
   "gitignore": [
