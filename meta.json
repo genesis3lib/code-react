@@ -17,7 +17,8 @@
       "typescript",
       "vite",
       "frontend"
-    ]
+    ],
+    "providers": ["aws"]
   },
   "scaffoldConfigTemplate": [
     {
