@@ -1,0 +1,117 @@
+# {{projectName}} - Frontend
+
+React application built with Vite, TypeScript, and shadcn/ui.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js LTS version (see `.nvmrc`)
+- npm (comes with Node.js)
+
+### Installation
+
+```bash
+npm install
+```
+
+### Development
+
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`
+
+### Build
+
+```bash
+npm run build
+```
+
+The production build will be created in the `dist/` directory.
+
+## UI Components
+
+This project uses [shadcn/ui](https://ui.shadcn.com/) for UI components. shadcn/ui has been initialized and is ready to use.
+
+### Adding Components
+
+To add shadcn/ui components to your project:
+
+```bash
+npx shadcn@latest add <component-name>
+```
+
+**Examples:**
+
+```bash
+# Add a button component
+npx shadcn@latest add button
+
+# Add multiple components at once
+npx shadcn@latest add button card dialog form input
+```
+
+### Available Components
+
+See the full list of available components and their documentation:
+
+- **Component List**: https://ui.shadcn.com/docs/components
+- **CLI Documentation**: https://ui.shadcn.com/docs/cli
+
+Popular components include:
+- `button` - Button component with variants
+- `card` - Card container component
+- `dialog` - Modal dialog component
+- `form` - Form components with validation
+- `input` - Input field component
+- `select` - Select dropdown component
+- `table` - Data table component
+- `toast` - Toast notification component
+
+## Tech Stack
+
+- **React** {{reactVersion}}
+- **TypeScript** - Type-safe JavaScript
+- **Vite** - Fast build tool and dev server
+- **Tailwind CSS** - Utility-first CSS framework
+- **shadcn/ui** - Re-usable component library
+- **Lucide React** - Icon library
+- **Redux Toolkit** - State management
+- **React Redux** - React bindings for Redux
+- **Axios** - HTTP client
+
+## Project Structure
+
+```
+src/
+├── components/     # React components
+├── lib/           # Utility functions and shadcn/ui setup
+├── hooks/         # Custom React hooks
+├── styles/        # Global styles
+└── main.tsx       # Application entry point
+```
+
+## Environment Variables
+
+Environment variables are managed through `.env` files:
+
+- `.env` - Development environment (gitignored)
+- `.env.example` - Example template (committed to git)
+
+All environment variables used by Vite must be prefixed with `VITE_`:
+
+```bash
+VITE_API_BASE=http://localhost:8080
+VITE_APP_NAME={{projectName}}
+```
+
+## Learn More
+
+- [React Documentation](https://react.dev/)
+- [Vite Documentation](https://vitejs.dev/)
+- [TypeScript Documentation](https://www.typescriptlang.org/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/)
+- [shadcn/ui Documentation](https://ui.shadcn.com/)
+- [Redux Toolkit Documentation](https://redux-toolkit.js.org/)

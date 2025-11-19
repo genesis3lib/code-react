@@ -60,7 +60,9 @@ module.exports = {
         'frontend/.env.staging',
         'frontend/.env.prod',
         'frontend/src/main.tsx',
-        'frontend/src/App.tsx'
+        'frontend/src/App.tsx',
+        'frontend/.nvmrc',
+        'frontend/README.md'
       ],
       forbiddenFiles: [
         'frontend/.env.example',
@@ -83,11 +85,40 @@ module.exports = {
         },
         {
           file: 'frontend/package.json',
-          contains: ['react', 'vite', 'typescript']
+          contains: [
+            'react',
+            'vite',
+            'typescript',
+            'axios',
+            'tailwindcss',
+            'lucide-react',
+            'react-redux',
+            'tailwind-merge',
+            '@tailwindcss/vite',
+            '@reduxjs/toolkit',
+            'autoprefixer',
+            'postcss'
+          ]
         },
         {
           file: 'frontend/vite.config.ts',
           contains: ['defineConfig', 'react']
+        },
+        {
+          file: 'frontend/.nvmrc',
+          contains: ['lts/*']
+        },
+        {
+          file: 'frontend/README.md',
+          contains: [
+            'shadcn/ui',
+            'npx shadcn@latest add',
+            'https://ui.shadcn.com/docs/components',
+            'https://ui.shadcn.com/docs/cli',
+            'axios',
+            'Redux Toolkit',
+            'Tailwind CSS'
+          ]
         }
       ]
     },
@@ -126,7 +157,9 @@ module.exports = {
         'frontend/.env.dev',
         'frontend/.env.prod',
         'frontend/src/main.jsx',
-        'frontend/src/App.jsx'
+        'frontend/src/App.jsx',
+        'frontend/.nvmrc',
+        'frontend/README.md'
       ],
       forbiddenFiles: [
         'frontend/vite.config.ts',
@@ -140,8 +173,16 @@ module.exports = {
         },
         {
           file: 'frontend/package.json',
-          contains: ['react', 'vite'],
+          contains: ['react', 'vite', 'axios', 'tailwindcss', 'lucide-react'],
           notContains: ['typescript', '@types/react']
+        },
+        {
+          file: 'frontend/.nvmrc',
+          contains: ['lts/*']
+        },
+        {
+          file: 'frontend/README.md',
+          contains: ['shadcn/ui', 'https://ui.shadcn.com/docs/components']
         }
       ]
     },
@@ -164,12 +205,22 @@ module.exports = {
       expectedFiles: [
         'frontend/package.json',
         'frontend/vite.config.ts',
-        'frontend/.env'
+        'frontend/.env',
+        'frontend/.nvmrc',
+        'frontend/README.md'
       ],
       validations: [
         {
           file: 'frontend/.env',
           contains: ['VITE_APP_NAME=', 'VITE_API_BASE=']
+        },
+        {
+          file: 'frontend/.nvmrc',
+          contains: ['lts/*']
+        },
+        {
+          file: 'frontend/README.md',
+          contains: ['shadcn/ui']
         }
       ]
     },
@@ -221,7 +272,9 @@ module.exports = {
       expectedFiles: [
         'frontend/.env',
         'frontend/.env.dev',
-        'frontend/.env.prod'
+        'frontend/.env.prod',
+        'frontend/.nvmrc',
+        'frontend/README.md'
       ],
       validations: [
         {
@@ -239,6 +292,14 @@ module.exports = {
             'VITE_ANALYTICS_ID=PROD-456',
             'VITE_FEATURE_FLAGS=stable-only'
           ]
+        },
+        {
+          file: 'frontend/.nvmrc',
+          contains: ['lts/*']
+        },
+        {
+          file: 'frontend/README.md',
+          contains: ['shadcn/ui', 'npx shadcn@latest add']
         }
       ]
     }

@@ -13,6 +13,61 @@ const path = require('path');
 const os = require('os');
 
 /**
+ * Runs a command and returns a promise
+ *
+ * @param {string} command - Command to run
+ * @param {Array} args - Command arguments
+ * @param {string} workingDir - Directory to run the command in
+ * @param {string} description - Description for logging
+ * @returns {Promise<void>}
+ */
+function runCommand(command, args, workingDir, description) {
+  return new Promise((resolve, reject) => {
+    console.log(`🔧 ${description}...`);
+    console.log(`📂 Working directory: ${workingDir}`);
+    console.log(`💻 Running: ${command} ${args.join(' ')}`);
+
+    const cmd = process.platform === 'win32' ? `${command}.cmd` : command;
+
+    const childProcess = spawn(cmd, args, {
+      cwd: workingDir,
+      stdio: 'pipe',
+      shell: true
+    });
+
+    let stdout = '';
+    let stderr = '';
+
+    childProcess.stdout.on('data', (data) => {
+      stdout += data.toString();
+      process.stdout.write('.');
+    });
+
+    childProcess.stderr.on('data', (data) => {
+      stderr += data.toString();
+    });
+
+    childProcess.on('close', (code) => {
+      console.log(''); // New line after progress dots
+
+      if (code !== 0) {
+        console.error(`❌ ${description} failed with code ${code}`);
+        console.error('stdout:', stdout);
+        console.error('stderr:', stderr);
+        return reject(new Error(`${description} failed with exit code ${code}`));
+      }
+
+      console.log(`✅ ${description} completed successfully`);
+      resolve();
+    });
+
+    childProcess.on('error', (err) => {
+      reject(new Error(`Failed to run ${command}: ${err.message}`));
+    });
+  });
+}
+
+/**
  * Runs Vite CLI to create a new React project
  *
  * @param {string} workingDir - Directory to run the command in
@@ -21,54 +76,12 @@ const os = require('os');
  * @returns {Promise<void>}
  */
 function runViteCreate(workingDir, projectName, template = 'react-ts') {
-  return new Promise((resolve, reject) => {
-    console.log(`🌐 Running: npm create vite@latest ${projectName} -- --template ${template}`);
-    console.log(`📂 Working directory: ${workingDir}`);
-
-    // npm create vite@latest <project-name> -- --template react-ts
-    const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-
-    const viteProcess = spawn(
-      npmCommand,
-      ['create', 'vite@latest', projectName, '--', '--template', template],
-      {
-        cwd: workingDir,
-        stdio: 'pipe',
-        shell: true
-      }
-    );
-
-    let stdout = '';
-    let stderr = '';
-
-    viteProcess.stdout.on('data', (data) => {
-      stdout += data.toString();
-      // Show progress
-      process.stdout.write('.');
-    });
-
-    viteProcess.stderr.on('data', (data) => {
-      stderr += data.toString();
-    });
-
-    viteProcess.on('close', (code) => {
-      console.log(''); // New line after progress dots
-
-      if (code !== 0) {
-        console.error(`❌ Vite scaffolding failed with code ${code}`);
-        console.error('stdout:', stdout);
-        console.error('stderr:', stderr);
-        return reject(new Error(`Vite create command failed with exit code ${code}`));
-      }
-
-      console.log(`✅ Vite project created successfully`);
-      resolve();
-    });
-
-    viteProcess.on('error', (err) => {
-      reject(new Error(`Failed to run Vite: ${err.message}`));
-    });
-  });
+  return runCommand(
+    'npm',
+    ['create', 'vite@latest', projectName, '--', '--template', template],
+    workingDir,
+    'Creating Vite project'
+  );
 }
 
 /**
@@ -146,6 +159,45 @@ function removeFiles(files, filesToRemove) {
 }
 
 /**
+ * Updates package.json with additional dependencies
+ *
+ * @param {string} projectPath - Path to the project
+ * @param {Object} dependencies - Dependencies from meta.json
+ * @returns {void}
+ */
+function updatePackageJson(projectPath, dependencies) {
+  const packageJsonPath = path.join(projectPath, 'package.json');
+
+  if (!fs.existsSync(packageJsonPath)) {
+    console.warn('⚠️ package.json not found, skipping dependency update');
+    return;
+  }
+
+  console.log('📝 Updating package.json with additional dependencies...');
+
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
+  // Merge dependencies
+  if (dependencies.npm?.dependencies) {
+    packageJson.dependencies = {
+      ...packageJson.dependencies,
+      ...dependencies.npm.dependencies
+    };
+  }
+
+  // Merge devDependencies
+  if (dependencies.npm?.devDependencies) {
+    packageJson.devDependencies = {
+      ...packageJson.devDependencies,
+      ...dependencies.npm.devDependencies
+    };
+  }
+
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+  console.log('✅ package.json updated');
+}
+
+/**
  * Main scaffolding function - called by Genesis3
  *
  * @param {Object} moduleConfig - Module meta.json configuration
@@ -183,6 +235,36 @@ async function scaffold(moduleConfig, context) {
 
     // Vite creates the project in a subdirectory with the project name
     const actualProjectPath = path.join(tempDir, projectName);
+
+    // Update package.json with additional dependencies
+    updatePackageJson(actualProjectPath, moduleConfig.dependencies || {});
+
+    // Skip slow operations in test mode
+    const isTestMode = process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID !== undefined;
+
+    if (!isTestMode) {
+      // Install dependencies
+      await runCommand('npm', ['install'], actualProjectPath, 'Installing dependencies');
+
+      // Initialize shadcn (with default options)
+      console.log('🎨 Initializing shadcn...');
+      try {
+        await runCommand(
+          'npx',
+          ['shadcn@latest', 'init', '-d'],
+          actualProjectPath,
+          'Initializing shadcn'
+        );
+        console.log('✅ shadcn initialized successfully');
+        console.log('ℹ️  To add components, run: npx shadcn@latest add <component-name>');
+        console.log('ℹ️  See https://ui.shadcn.com/docs/components for available components');
+      } catch (err) {
+        console.warn(`⚠️ shadcn init failed: ${err.message}`);
+        console.warn('You can initialize it manually later with: npx shadcn@latest init');
+      }
+    } else {
+      console.log('⏭️  Skipping npm install and shadcn init in test mode');
+    }
 
     // Read all generated files
     console.log('📂 Reading generated files...');
