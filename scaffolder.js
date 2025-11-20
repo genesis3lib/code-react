@@ -239,32 +239,8 @@ async function scaffold(moduleConfig, context) {
     // Update package.json with additional dependencies
     updatePackageJson(actualProjectPath, moduleConfig.dependencies || {});
 
-    // Skip slow operations in test mode
-    const isTestMode = process.env.NODE_ENV === 'test' || process.env.JEST_WORKER_ID !== undefined;
-
-    if (!isTestMode) {
-      // Install dependencies
-      await runCommand('npm', ['install'], actualProjectPath, 'Installing dependencies');
-
-      // Initialize shadcn (with default options)
-      console.log('🎨 Initializing shadcn...');
-      try {
-        await runCommand(
-          'npx',
-          ['shadcn@latest', 'init', '-d'],
-          actualProjectPath,
-          'Initializing shadcn'
-        );
-        console.log('✅ shadcn initialized successfully');
-        console.log('ℹ️  To add components, run: npx shadcn@latest add <component-name>');
-        console.log('ℹ️  See https://ui.shadcn.com/docs/components for available components');
-      } catch (err) {
-        console.warn(`⚠️ shadcn init failed: ${err.message}`);
-        console.warn('You can initialize it manually later with: npx shadcn@latest init');
-      }
-    } else {
-      console.log('⏭️  Skipping npm install and shadcn init in test mode');
-    }
+    // Skip npm install and shadcn init - developers will run these after cloning
+    console.log('⏭️  Skipping npm install and shadcn init (run these after cloning the project)');
 
     // Read all generated files
     console.log('📂 Reading generated files...');
