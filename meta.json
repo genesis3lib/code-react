@@ -67,6 +67,7 @@
         "tailwindcss": "^4.1.17",
         "lucide-react": "^0.554.0",
         "react-redux": "^9.2.0",
+        "react-error-boundary": "^6.0.0",
         "tailwind-merge": "^3.4.0",
         "@tailwindcss/vite": "^4.1.17",
         "@reduxjs/toolkit": "^2.10.1",
@@ -137,6 +138,21 @@
       "frontend": {},
       "cicd": {}
     }
+  },
+  "transformations": {
+    "replacements": [
+      {
+        "files": [
+          "index.html"
+        ],
+        "operations": [
+          {
+            "find": "<title>project</title>",
+            "replace": "<title>{{{projectName}}}</title>"
+          }
+        ]
+      }
+    ]
   },
   "gitignore": [
     "# React / Vite / Node.js",

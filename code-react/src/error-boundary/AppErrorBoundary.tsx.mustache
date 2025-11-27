@@ -1,0 +1,47 @@
+{{=<% %>=}}import { ErrorBoundary } from 'react-error-boundary';
+import type { ReactNode, ErrorInfo } from 'react';
+import { ErrorFallback } from './ErrorFallback';
+
+interface AppErrorBoundaryProps {
+  children: ReactNode;
+}
+
+/**
+ * Application Error Boundary
+ *
+ * Wraps the application with error boundary to catch and handle errors gracefully
+ * Uses react-error-boundary library for robust error handling
+ *
+ * Features:
+ * - Catches JavaScript errors anywhere in the child component tree
+ * - Displays fallback UI when errors occur
+ * - Provides error reset functionality
+ * - Logs errors for debugging (in development)
+ */
+export function AppErrorBoundary({ children }: AppErrorBoundaryProps) {
+  const handleError = (error: Error, info: ErrorInfo) => {
+    // Log error to console in development
+    if (import.meta.env.DEV) {
+      console.error('Error caught by boundary:', error);
+      console.error('Component stack:', info.componentStack);
+    }
+
+    // TODO: Send error to error tracking service (e.g., Sentry, LogRocket)
+    // Example: errorTrackingService.logError(error, info);
+  };
+
+  return (
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onError={handleError}
+      onReset={() => {
+        // Reset any state that might have caused the error
+        // This is called when the user clicks "Try again"
+        window.location.href = window.location.pathname;
+      }}
+    >
+      {children}
+    </ErrorBoundary>
+  );
+}
+<%={{ }}=%>

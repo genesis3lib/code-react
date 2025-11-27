@@ -1,3 +1,5 @@
+import { ThemeSelector } from '../components/ThemeSelector';
+
 /**
  * Profile Page - Placeholder
  *
@@ -9,19 +11,26 @@
  * - Authentication status
  * - Logout functionality
  * - Provider-specific features
+ * - Theme selector (ThemeSelector component)
  */
 export function Profile() {
   return (
     <div className="container py-10">
-      <div className="mx-auto max-w-2xl">
-        <h1 className="text-4xl font-bold tracking-tight">Profile</h1>
-        <p className="mt-4 text-lg text-muted-foreground">
-          This is the profile page placeholder.
-        </p>
-        <p className="mt-2 text-sm text-muted-foreground">
-          When you add an authentication extension (Auth0, Okta, or Stytch), this page will be
-          replaced with a proper profile page that displays user information and authentication status.
-        </p>
+      <div className="mx-auto max-w-2xl space-y-8">
+        <div>
+          <h1 className="text-4xl font-bold tracking-tight">Profile</h1>
+          <p className="mt-4 text-lg text-muted-foreground">
+            This is the profile page placeholder.
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            When you add an authentication extension (Auth0, Okta, or Stytch), this page will be
+            replaced with a proper profile page that displays user information and authentication status.
+          </p>
+        </div>
+
+        <div className="border border-border rounded-lg p-6">
+          <ThemeSelector />
+        </div>
       </div>
     </div>
   );

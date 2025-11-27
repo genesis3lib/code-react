@@ -1,0 +1,25 @@
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+
+export type ColorScheme = 'light' | 'dark' | 'system';
+
+interface AppState {
+  colorScheme: ColorScheme;
+}
+
+const initialState: AppState = {
+  colorScheme: 'system',
+};
+
+const appSlice = createSlice({
+  name: 'app',
+  initialState,
+  reducers: {
+    setColorScheme: (state, action: PayloadAction<ColorScheme>) => {
+      state.colorScheme = action.payload;
+    },
+  },
+});
+
+export const { setColorScheme } = appSlice.actions;
+export default appSlice.reducer;

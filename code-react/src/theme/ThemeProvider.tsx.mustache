@@ -1,0 +1,54 @@
+{{=<% %>=}}import { useEffect, useState, useCallback } from 'react';
+import type { ReactNode } from 'react';
+import { ThemeContext } from './ThemeContext';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { setColorScheme as setColorSchemeAction } from '../redux/slices/appSlice';
+import type { ColorScheme } from '../redux/slices/appSlice';
+
+interface ThemeProviderProps {
+  children: ReactNode;
+}
+
+export function ThemeProvider({ children }: ThemeProviderProps) {
+  const dispatch = useAppDispatch();
+  const colorScheme = useAppSelector((state) => state.app.colorScheme);
+  const [systemTheme, setSystemTheme] = useState<'light' | 'dark'>(() =>
+    window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  );
+
+  // Listen to system theme changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      setSystemTheme(e.matches ? 'dark' : 'light');
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  // Calculate effective theme
+  const effectiveTheme = colorScheme === 'system' ? systemTheme : colorScheme;
+
+  // Apply theme to document
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle('dark', effectiveTheme === 'dark');
+  }, [effectiveTheme]);
+
+  // Sync with localStorage
+  useEffect(() => {
+    localStorage.setItem('colorScheme', colorScheme);
+  }, [colorScheme]);
+
+  const setColorScheme = useCallback((scheme: ColorScheme) => {
+    dispatch(setColorSchemeAction(scheme));
+  }, [dispatch]);
+
+  return (
+    <ThemeContext.Provider value={{ colorScheme, effectiveTheme, setColorScheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+<%={{ }}=%>

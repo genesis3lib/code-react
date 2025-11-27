@@ -1,0 +1,48 @@
+import { useTheme } from '../theme';
+import type { ColorScheme } from '../redux/slices/appSlice';
+import { Button } from './ui/button';
+
+export function ThemeSelector() {
+  const { colorScheme, setColorScheme } = useTheme();
+
+  const handleThemeChange = (scheme: ColorScheme) => {
+    setColorScheme(scheme);
+  };
+
+  return (
+    <div className="space-y-3">
+      <h3 className="text-sm font-semibold">Appearance</h3>
+      <div className="flex gap-2">
+        <Button
+          variant={colorScheme === 'light' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => handleThemeChange('light')}
+          className="flex-1"
+        >
+          Light
+        </Button>
+        <Button
+          variant={colorScheme === 'dark' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => handleThemeChange('dark')}
+          className="flex-1"
+        >
+          Dark
+        </Button>
+        <Button
+          variant={colorScheme === 'system' ? 'default' : 'outline'}
+          size="sm"
+          onClick={() => handleThemeChange('system')}
+          className="flex-1"
+        >
+          System
+        </Button>
+      </div>
+      <p className="text-xs text-muted-foreground">
+        {colorScheme === 'system'
+          ? 'Using system preference'
+          : `Using ${colorScheme} mode`}
+      </p>
+    </div>
+  );
+}

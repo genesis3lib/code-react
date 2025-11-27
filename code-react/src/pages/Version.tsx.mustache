@@ -1,0 +1,95 @@
+import { AppPageLayout } from '../components/AppPageLayout';
+import { version } from '../utils/version';
+import { useGetHealthQuery } from '../redux/api/baseApi';
+
+export function Version() {
+  const { data: backendHealth, isLoading, error } = useGetHealthQuery();
+
+  return (
+    <AppPageLayout>
+      <h1 className="text-4xl font-bold tracking-tight mb-6">Version Details</h1>
+
+      {/* Frontend Version */}
+      <h2 className="text-2xl font-semibold mt-8 mb-4">Frontend</h2>
+      <div className="border border-border rounded-lg overflow-hidden">
+        <table className="w-full">
+          <tbody className="divide-y divide-border">
+            <tr>
+              <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Build Number</td>
+              <td className="px-4 py-3 text-sm">{version['gh.build']}</td>
+            </tr>
+            <tr>
+              <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Build Attempt</td>
+              <td className="px-4 py-3 text-sm">{version['gh.attempt']}</td>
+            </tr>
+            <tr>
+              <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Action</td>
+              <td className="px-4 py-3 text-sm">{version['gh.action']}</td>
+            </tr>
+            <tr>
+              <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Modified Date</td>
+              <td className="px-4 py-3 text-sm">{version['gh.modifiedDate']}</td>
+            </tr>
+            <tr>
+              <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Commit SHA</td>
+              <td className="px-4 py-3 text-sm text-muted-foreground">{version['gh.sha']}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Backend Version */}
+      <h2 className="text-2xl font-semibold mt-8 mb-4">Backend</h2>
+      <div className="border border-border rounded-lg overflow-hidden">
+        {isLoading && (
+          <div className="px-4 py-8 text-center text-muted-foreground">
+            Loading backend version...
+          </div>
+        )}
+        {error && (
+          <div className="px-4 py-8 text-center text-destructive">
+            Failed to load backend version
+          </div>
+        )}
+        {backendHealth && (
+          <table className="w-full">
+            <tbody className="divide-y divide-border">
+              <tr>
+                <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Status</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.status}</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Service</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.service}</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Version</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.version}</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Build Number</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.build['gh.build']}</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Build Attempt</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.build['gh.attempt']}</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Action</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.build['gh.action']}</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Modified Date</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.build['gh.modifiedDate']}</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Commit SHA</td>
+                <td className="px-4 py-3 text-sm text-muted-foreground">{backendHealth.build['gh.sha']}</td>
+              </tr>
+            </tbody>
+          </table>
+        )}
+      </div>
+    </AppPageLayout>
+  );
+}
