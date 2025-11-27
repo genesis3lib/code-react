@@ -1,0 +1,11 @@
+interface AppPageLayoutProps {
+  children: React.ReactNode;
+}
+
+export function AppPageLayout({ children }: AppPageLayoutProps) {
+  return (
+    <div className="container mx-auto py-10 max-w-4xl">
+      {children}
+    </div>
+  );
+}

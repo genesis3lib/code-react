@@ -1,12 +1,12 @@
+import { AppPageLayout } from '../components/AppPageLayout';
+
 export function Home() {
   return (
-    <div className="container py-10">
-      <div className="mx-auto max-w-2xl">
-        <h1 className="text-4xl font-bold tracking-tight">Welcome to {{{projectName}}}</h1>
-        <p className="mt-4 text-lg text-muted-foreground">
-          This is the home page placeholder. Replace this with your actual content.
-        </p>
-      </div>
-    </div>
+    <AppPageLayout>
+      <h1 className="text-4xl font-bold tracking-tight">Welcome to {{{projectName}}}</h1>
+      <p className="mt-4 text-lg text-muted-foreground">
+        This is the home page placeholder. Replace this with your actual content.
+      </p>
+    </AppPageLayout>
   );
 }
