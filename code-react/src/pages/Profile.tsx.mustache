@@ -1,0 +1,28 @@
+/**
+ * Profile Page - Placeholder
+ *
+ * This file will be REPLACED by auth extensions (extension-auth0, extension-okta, extension-stytch)
+ * when they are added to the project.
+ *
+ * Auth extensions should provide their own Profile.tsx.mustache that includes:
+ * - User information display
+ * - Authentication status
+ * - Logout functionality
+ * - Provider-specific features
+ */
+export function Profile() {
+  return (
+    <div className="container py-10">
+      <div className="mx-auto max-w-2xl">
+        <h1 className="text-4xl font-bold tracking-tight">Profile</h1>
+        <p className="mt-4 text-lg text-muted-foreground">
+          This is the profile page placeholder.
+        </p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          When you add an authentication extension (Auth0, Okta, or Stytch), this page will be
+          replaced with a proper profile page that displays user information and authentication status.
+        </p>
+      </div>
+    </div>
+  );
+}

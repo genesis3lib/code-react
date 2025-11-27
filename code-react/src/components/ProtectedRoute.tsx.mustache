@@ -1,0 +1,28 @@
+import { Navigate } from 'react-router-dom';
+
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+/**
+ * ProtectedRoute component - wraps routes that require authentication
+ *
+ * This is a basic implementation that can be extended by auth extensions
+ * (extension-auth0, extension-okta, extension-stytch) to provide
+ * actual authentication logic.
+ *
+ * By default, this allows all access. Auth extensions should override
+ * this component with their own implementation.
+ */
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  // TODO: Replace with actual auth check when auth extension is added
+  // For now, allow all access (no authentication required)
+  const isAuthenticated = true;
+
+  if (!isAuthenticated) {
+    // Redirect to home if not authenticated
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+}
