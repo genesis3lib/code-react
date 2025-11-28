@@ -51,40 +51,40 @@ export function Version() {
             Failed to load backend version
           </div>
         )}
-        {backendHealth && (
+        {backendHealth?.response && (
           <table className="w-full">
             <tbody className="divide-y divide-border">
               <tr>
                 <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Status</td>
-                <td className="px-4 py-3 text-sm">{backendHealth.status}</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.response.status}</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Service</td>
-                <td className="px-4 py-3 text-sm">{backendHealth.service}</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.response.service}</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Version</td>
-                <td className="px-4 py-3 text-sm">{backendHealth.version}</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.response.version}</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Build Number</td>
-                <td className="px-4 py-3 text-sm">{backendHealth.build['gh.build']}</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.response.build.build}</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Build Attempt</td>
-                <td className="px-4 py-3 text-sm">{backendHealth.build['gh.attempt']}</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.response.build.attempt}</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Action</td>
-                <td className="px-4 py-3 text-sm">{backendHealth.build['gh.action']}</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.response.build.action}</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Modified Date</td>
-                <td className="px-4 py-3 text-sm">{backendHealth.build['gh.modifiedDate']}</td>
+                <td className="px-4 py-3 text-sm">{backendHealth.response.build.modifiedDate}</td>
               </tr>
               <tr>
                 <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Commit SHA</td>
-                <td className="px-4 py-3 text-sm text-muted-foreground">{backendHealth.build['gh.sha']}</td>
+                <td className="px-4 py-3 text-sm text-muted-foreground">{backendHealth.response.build.sha}</td>
               </tr>
             </tbody>
           </table>

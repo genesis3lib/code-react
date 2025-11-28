@@ -1,15 +1,20 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export interface HealthResponse {
-  status: string;
-  service: string;
-  version: string;
-  build: {
-    'gh.build': string;
-    'gh.attempt': string;
-    'gh.action': string;
-    'gh.modifiedDate': string;
-    'gh.sha': string;
+  requestId: string;
+  faults: null;
+  response: {
+    status: string;
+    service: string;
+    version: string;
+    timestamp: string;
+    build: {
+      build: string;
+      attempt: string;
+      action: string;
+      modifiedDate: string;
+      sha: string;
+    };
   };
 }
 
