@@ -125,7 +125,6 @@ jobs:
             cp .env.prod .env.production
             echo "✅ Copied .env.prod to .env.production (Vite expects .env.production, not .env.prod by default on npm run build)"
           else
-            cp .env.{{{githubVarsOpen}}} env.ENVIRONMENT {{{githubVarsClose}}} .env.{{{githubVarsOpen}}} env.ENVIRONMENT {{{githubVarsClose}}}
             echo "✅ Using .env.{{{githubVarsOpen}}} env.ENVIRONMENT {{{githubVarsClose}}}"
           fi
 
