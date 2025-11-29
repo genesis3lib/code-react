@@ -108,11 +108,11 @@ jobs:
       - name: Add build info
         run: |
           echo "export const version = {" > {{frontendModule.moduleId}}/src/utils/version.ts
-          echo "  'gh.build': '{{{githubVarsOpen}}} github.run_number {{{githubVarsClose}}}'," >> {{frontendModule.moduleId}}/src/utils/version.ts
-          echo "  'gh.attempt': '{{{githubVarsOpen}}} github.run_attempt {{{githubVarsClose}}}'," >> {{frontendModule.moduleId}}/src/utils/version.ts
-          echo "  'gh.action': '{{{githubVarsOpen}}} github.action {{{githubVarsClose}}}'," >> {{frontendModule.moduleId}}/src/utils/version.ts
-          echo "  'gh.modifiedDate': '{{{githubVarsOpen}}} github.event.repository.updated_at {{{githubVarsClose}}}'," >> {{frontendModule.moduleId}}/src/utils/version.ts
-          echo "  'gh.sha': '$(cd {{frontendModule.moduleId}} && git rev-parse --short HEAD)'" >> {{frontendModule.moduleId}}/src/utils/version.ts
+          echo "  build: '{{{githubVarsOpen}}} github.run_number {{{githubVarsClose}}}'," >> {{frontendModule.moduleId}}/src/utils/version.ts
+          echo "  attempt: '{{{githubVarsOpen}}} github.run_attempt {{{githubVarsClose}}}'," >> {{frontendModule.moduleId}}/src/utils/version.ts
+          echo "  action: '{{{githubVarsOpen}}} github.action {{{githubVarsClose}}}'," >> {{frontendModule.moduleId}}/src/utils/version.ts
+          echo "  modifiedDate: '{{{githubVarsOpen}}} github.event.repository.updated_at {{{githubVarsClose}}}'," >> {{frontendModule.moduleId}}/src/utils/version.ts
+          echo "  sha: '$(cd {{frontendModule.moduleId}} && git rev-parse --short HEAD)'" >> {{frontendModule.moduleId}}/src/utils/version.ts
           echo "};" >> {{frontendModule.moduleId}}/src/utils/version.ts
 
       - name: Setup environment variables

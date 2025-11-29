@@ -16,23 +16,23 @@ export function Version() {
           <tbody className="divide-y divide-border">
             <tr>
               <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Build Number</td>
-              <td className="px-4 py-3 text-sm">{version['gh.build']}</td>
+              <td className="px-4 py-3 text-sm">{version.build}</td>
             </tr>
             <tr>
               <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Build Attempt</td>
-              <td className="px-4 py-3 text-sm">{version['gh.attempt']}</td>
+              <td className="px-4 py-3 text-sm">{version.attempt}</td>
             </tr>
             <tr>
               <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Action</td>
-              <td className="px-4 py-3 text-sm">{version['gh.action']}</td>
+              <td className="px-4 py-3 text-sm">{version.action}</td>
             </tr>
             <tr>
               <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Modified Date</td>
-              <td className="px-4 py-3 text-sm">{version['gh.modifiedDate']}</td>
+              <td className="px-4 py-3 text-sm">{version.modifiedDate}</td>
             </tr>
             <tr>
               <td className="px-4 py-3 font-semibold text-sm bg-muted/50">Commit SHA</td>
-              <td className="px-4 py-3 text-sm text-muted-foreground">{version['gh.sha']}</td>
+              <td className="px-4 py-3 text-sm text-muted-foreground">{version.sha}</td>
             </tr>
           </tbody>
         </table>
