@@ -118,14 +118,15 @@ jobs:
       - name: Setup environment variables
         run: |
           cd {{frontendModule.moduleId}}
-          echo "📝 Setting up environment file for {{{githubVarsOpen}}} env.ENVIRONMENT {{{githubVarsClose}}} environment..."
+          echo "📝 Checking environment file for {{{githubVarsOpen}}} env.ENVIRONMENT {{{githubVarsClose}}} environment..."
 
-          # Copy environment-specific .env file for Vite build
-          if [ "{{{githubVarsOpen}}} env.ENVIRONMENT {{{githubVarsClose}}}" = "prod" ]; then
-            cp .env.prod .env.production
-            echo "✅ Copied .env.prod to .env.production (Vite expects .env.production, not .env.prod by default on npm run build)"
+          # Vite uses --mode flag to load .env.{mode} files
+          # e.g., --mode dev loads .env + .env.dev
+          ENV_FILE=".env.{{{githubVarsOpen}}} env.ENVIRONMENT {{{githubVarsClose}}}"
+          if [ -f "$ENV_FILE" ]; then
+            echo "✅ Found $ENV_FILE - will use --mode {{{githubVarsOpen}}} env.ENVIRONMENT {{{githubVarsClose}}} for build"
           else
-            echo "✅ Using .env.{{{githubVarsOpen}}} env.ENVIRONMENT {{{githubVarsClose}}}"
+            echo "⚠️ Warning: $ENV_FILE not found, build will use base .env only"
           fi
 
           # List env files for debugging
@@ -141,7 +142,7 @@ jobs:
           npm install
           npx update-browserslist-db@latest
           echo "🔨 Running build for {{{githubVarsOpen}}} env.ENVIRONMENT  {{{githubVarsClose}}} environment..."
-          CI=false npm run build
+          CI=false npm run build -- --mode {{{githubVarsOpen}}} env.ENVIRONMENT {{{githubVarsClose}}}
 
       - name: Check and commit package-lock.json changes
         run: |
