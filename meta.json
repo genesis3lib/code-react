@@ -25,10 +25,11 @@
       "key": "reactVersion",
       "label": "React Version",
       "type": "select",
-      "options": [
-        "18",
-        "19"
-      ],
+      "options": ["18", "19"],
+      "optionNotes": {
+        "18": { "notes": "Stable LTS - broad ecosystem compatibility" },
+        "19": { "notes": "Latest - recommended for new projects" }
+      },
       "default": "19",
       "required": true,
       "description": "React library version",
@@ -47,10 +48,11 @@
       "key": "buildTool",
       "label": "Build Tool",
       "type": "select",
-      "options": [
-        "vite",
-        "create-react-app"
-      ],
+      "options": ["vite", "create-react-app"],
+      "optionNotes": {
+        "vite": { "notes": "Fast, modern - recommended" },
+        "create-react-app": { "notes": "Legacy, slower builds" }
+      },
       "default": "vite",
       "required": true,
       "description": "Build tool for the React application",
