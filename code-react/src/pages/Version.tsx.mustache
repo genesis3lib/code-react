@@ -1,9 +1,13 @@
 import { AppPageLayout } from '../components/AppPageLayout';
 import { version } from '../utils/version';
+{{#hasBackend}}
 import { useGetHealthQuery } from '../redux/api/baseApi';
+{{/hasBackend}}
 
 export function Version() {
+{{#hasBackend}}
   const { data: backendHealth, isLoading, error } = useGetHealthQuery();
+{{/hasBackend}}
 
   return (
     <AppPageLayout>
@@ -37,6 +41,7 @@ export function Version() {
           </tbody>
         </table>
       </div>
+{{#hasBackend}}
 
       {/* Backend Version */}
       <h2 className="text-2xl font-semibold mt-8 mb-4">Backend</h2>
@@ -90,6 +95,7 @@ export function Version() {
           </table>
         )}
       </div>
+{{/hasBackend}}
     </AppPageLayout>
   );
 }

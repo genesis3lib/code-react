@@ -16,9 +16,11 @@ export function Layout() {
                 Home
               </Link>
             </div>
+{{#hasAuth}}
             <Link to="/profile" className="text-sm font-medium text-foreground/80 hover:text-foreground">
               Profile
             </Link>
+{{/hasAuth}}
           </div>
         </div>
       </nav>

@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+{{#hasBackend}}
 export interface HealthResponse {
   requestId: string;
   faults: null;
@@ -18,11 +19,13 @@ export interface HealthResponse {
   };
 }
 
+{{/hasBackend}}
 export const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     baseUrl: import.meta.env.VITE_API_BASE || 'http://localhost:8080',
   }),
+{{#hasBackend}}
   tagTypes: ['Health'],
   endpoints: (builder) => ({
     getHealth: builder.query<HealthResponse, void>({
@@ -30,6 +33,13 @@ export const baseApi = createApi({
       providesTags: ['Health'],
     }),
   }),
+{{/hasBackend}}
+{{^hasBackend}}
+  tagTypes: [],
+  endpoints: () => ({}),
+{{/hasBackend}}
 });
 
+{{#hasBackend}}
 export const { useGetHealthQuery } = baseApi;
+{{/hasBackend}}
