@@ -1,4 +1,5 @@
 {{#hasAuth}}
+import { AppPageLayout } from '../components/AppPageLayout';
 import { ThemeSelector } from '../components/ThemeSelector';
 
 /**
@@ -16,8 +17,8 @@ import { ThemeSelector } from '../components/ThemeSelector';
  */
 export function Profile() {
   return (
-    <div className="container py-10">
-      <div className="mx-auto max-w-2xl space-y-8">
+    <AppPageLayout>
+      <div className="space-y-8">
         <div>
           <h1 className="text-4xl font-bold tracking-tight">Profile</h1>
           <p className="mt-4 text-lg text-muted-foreground">
@@ -33,7 +34,7 @@ export function Profile() {
           <ThemeSelector />
         </div>
       </div>
-    </div>
+    </AppPageLayout>
   );
 }
 {{/hasAuth}}

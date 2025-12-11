@@ -8,6 +8,7 @@ import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Terms } from './pages/Terms';
 import { Version } from './pages/Version';
+import { PageNotFound } from './pages/PageNotFound';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           }
         />
 {{/hasAuth}}
+        <Route path="*" element={<PageNotFound />} />
       </Route>
     </Routes>
   );
