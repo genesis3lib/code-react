@@ -168,8 +168,9 @@ start_frontend() {
 
     print_info "Starting Vite development server on port $FRONTEND_PORT..."
 
+    # Run Vite with --mode dev to load .env.dev (which has runtime config values)
     (cd "$FRONTEND_DIR" && \
-        nohup npm run dev > "$FRONTEND_LOG" 2>&1 &
+        nohup npm run dev -- --mode dev > "$FRONTEND_LOG" 2>&1 &
         echo $! > "$FRONTEND_PID_FILE"
     )
 
