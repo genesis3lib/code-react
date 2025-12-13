@@ -158,6 +158,10 @@
   },
   "gitIgnore": {
     "react": [
+      "# Local development",
+      ".pids/",
+      ".logs/",
+      "",
       "# React / Vite / Node.js",
       "node_modules/",
       "dist/",
