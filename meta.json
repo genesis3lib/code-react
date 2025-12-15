@@ -9,6 +9,7 @@
       "cicd"
     ],
     "type": "react",
+    "providers": ["aws", "ghpages"],
     "description": "Modern React application with TypeScript and Vite",
     "version": "1.0.0",
     "author": "Genesis Team",
@@ -17,8 +18,7 @@
       "typescript",
       "vite",
       "frontend"
-    ],
-    "providers": ["aws", "ghpages"]
+    ]
   },
   "scaffoldConfigTemplate": [
     {
