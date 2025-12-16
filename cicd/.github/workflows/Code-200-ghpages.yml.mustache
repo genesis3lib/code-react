@@ -38,6 +38,12 @@ jobs:
           cd {{frontendModule.moduleId}}
           npm install
 
+      - name: Create version file
+        uses: ./.github/actions/create-version-file
+        with:
+          output-path: src/utils/version.ts
+          module-id: {{frontendModule.moduleId}}
+
       - name: Build for GitHub Pages
         run: |
           cd {{frontendModule.moduleId}}
@@ -52,6 +58,27 @@ jobs:
           # GitHub Pages serves 404.html for unknown routes
           # Copy index.html to 404.html so SPA routing works
           cp {{frontendModule.moduleId}}/dist/index.html {{frontendModule.moduleId}}/dist/404.html
+
+      - name: Check Pages is enabled
+        run: |
+          # Check if GitHub Pages is enabled via API
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token ${GITHUB_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")
+
+          if [ "$HTTP_STATUS" = "404" ]; then
+            echo "::error::GitHub Pages is not enabled for this repository."
+            echo ""
+            echo "To enable GitHub Pages:"
+            echo "1. Go to repository Settings → Pages"
+            echo "2. Under 'Build and deployment', select 'Source: GitHub Actions'"
+            echo "3. Re-run this workflow"
+            exit 1
+          fi
+          echo "GitHub Pages is enabled"
+        env:
+          GITHUB_TOKEN: {{{githubVarsOpen}}} secrets.GITHUB_TOKEN {{{githubVarsClose}}}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

@@ -9,7 +9,7 @@
       "cicd"
     ],
     "type": "react",
-    "providers": ["aws", "ghpages"],
+    "providers": ["aws"],
     "description": "Modern React application with TypeScript and Vite",
     "version": "1.0.0",
     "author": "Genesis Team",
