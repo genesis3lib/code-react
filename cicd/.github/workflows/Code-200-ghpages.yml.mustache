@@ -1,0 +1,66 @@
+name: Code-200-GitHub-Pages
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: {{{githubVarsOpen}}} steps.deployment.outputs.page_url {{{githubVarsClose}}}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Get repository name
+        id: repo
+        run: |
+          REPO_NAME="${GITHUB_REPOSITORY##*/}"
+          echo "name=${REPO_NAME}" >> $GITHUB_OUTPUT
+          echo "📦 Repository: ${REPO_NAME}"
+
+      - name: Install dependencies
+        run: |
+          cd {{frontendModule.moduleId}}
+          npm install
+
+      - name: Build for GitHub Pages
+        run: |
+          cd {{frontendModule.moduleId}}
+          # Set base path for GitHub Pages subdirectory deployment
+          # This sets both Vite's base option and BrowserRouter's basename
+          VITE_BASE="/{{{githubVarsOpen}}} steps.repo.outputs.name {{{githubVarsClose}}}/" npm run build
+        env:
+          CI: false
+
+      - name: Create 404.html for SPA routing
+        run: |
+          # GitHub Pages serves 404.html for unknown routes
+          # Copy index.html to 404.html so SPA routing works
+          cp {{frontendModule.moduleId}}/dist/index.html {{frontendModule.moduleId}}/dist/404.html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: {{frontendModule.moduleId}}/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
