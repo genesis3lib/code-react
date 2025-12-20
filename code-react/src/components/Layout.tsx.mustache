@@ -1,7 +1,33 @@
-import { Link, Outlet } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation, useOutlet } from 'react-router-dom';
 import { version } from '../utils/version';
+import { PAGE_TRANSITION_DURATION } from '../utils/config';
 
 export function Layout() {
+  const location = useLocation();
+  const outlet = useOutlet();
+
+  // Page transition state
+  const [displayOutlet, setDisplayOutlet] = useState(outlet);
+  const [isVisible, setIsVisible] = useState(true);
+  const prevPathRef = useRef(location.pathname);
+
+  useEffect(() => {
+    if (location.pathname !== prevPathRef.current) {
+      // Fade out
+      setIsVisible(false);
+
+      const timer = setTimeout(() => {
+        prevPathRef.current = location.pathname;
+        setDisplayOutlet(outlet);
+        // Fade in
+        setIsVisible(true);
+      }, PAGE_TRANSITION_DURATION);
+
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname, outlet]);
+
   return (
     <div className="flex min-h-screen flex-col">
       {/* Navigation - Sticky at top */}
@@ -25,9 +51,14 @@ export function Layout() {
         </div>
       </nav>
 
-      {/* Main content */}
+      {/* Main content with page transition */}
       <main className="flex-1">
-        <Outlet />
+        <div
+          className={`h-full w-full transition-opacity ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+          style={{ transitionDuration: `${PAGE_TRANSITION_DURATION}ms` }}
+        >
+          {displayOutlet}
+        </div>
       </main>
 
       {/* Footer */}

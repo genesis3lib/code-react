@@ -1,0 +1,47 @@
+import { useEffect, useState } from 'react';
+import { INITIAL_LOADER_DURATION, PAGE_TRANSITION_DURATION } from '../utils/config';
+
+interface InitialLoaderProps {
+  children: React.ReactNode;
+}
+
+export function InitialLoader({ children }: InitialLoaderProps) {
+  const [showLoader, setShowLoader] = useState(true);
+  const [fadeOut, setFadeOut] = useState(false);
+
+  useEffect(() => {
+    const fadeTimer = setTimeout(() => {
+      setFadeOut(true);
+    }, INITIAL_LOADER_DURATION);
+
+    const hideTimer = setTimeout(() => {
+      setShowLoader(false);
+    }, INITIAL_LOADER_DURATION + PAGE_TRANSITION_DURATION);
+
+    return () => {
+      clearTimeout(fadeTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
+
+  if (!showLoader) {
+    return <>{children}</>;
+  }
+
+  return (
+    <>
+      <div
+        className={`fixed inset-0 z-[9999] flex items-center justify-center bg-background transition-opacity ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
+        style={{ transitionDuration: `${PAGE_TRANSITION_DURATION}ms` }}
+      >
+        <div className="flex flex-col items-center gap-4">
+          <div className="text-3xl font-bold text-foreground">{{{projectName}}}</div>
+          <div className="h-1 w-24 overflow-hidden rounded-full bg-muted">
+            <div className="h-full w-full animate-pulse bg-primary" />
+          </div>
+        </div>
+      </div>
+      <div className="invisible">{children}</div>
+    </>
+  );
+}
