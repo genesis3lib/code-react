@@ -8,6 +8,7 @@ interface InitialLoaderProps {
 export function InitialLoader({ children }: InitialLoaderProps) {
   const [showLoader, setShowLoader] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
+  const transitionStyle = { transitionDuration: `${PAGE_TRANSITION_DURATION}ms` };
 
   useEffect(() => {
     const fadeTimer = setTimeout(() => {
@@ -32,7 +33,7 @@ export function InitialLoader({ children }: InitialLoaderProps) {
     <>
       <div
         className={`fixed inset-0 z-[9999] flex items-center justify-center bg-background transition-opacity ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
-        style={{ transitionDuration: `${PAGE_TRANSITION_DURATION}ms` }}
+        style={transitionStyle}
       >
         <div className="flex flex-col items-center gap-4">
           <div className="text-3xl font-bold text-foreground">{{{projectName}}}</div>

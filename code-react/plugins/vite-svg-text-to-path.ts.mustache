@@ -1,0 +1,180 @@
+import type { Plugin, ResolvedConfig } from 'vite';
+import { existsSync, readFileSync, writeFileSync, readdirSync, statSync, mkdirSync } from 'fs';
+import { join, dirname } from 'path';
+import type { TextToSVGInstance } from 'text-to-svg';
+
+// Google Fonts font URLs (GitHub raw for direct TTF access)
+const GOOGLE_FONTS_BASE = 'https://github.com/google/fonts/raw/main/ofl';
+
+async function downloadFont(fontFamily: string, destPath: string): Promise<boolean> {
+  const fontSlug = fontFamily.toLowerCase().replace(/\s+/g, '');
+  const url = `${GOOGLE_FONTS_BASE}/${fontSlug}/${fontFamily.replace(/\s+/g, '')}-Regular.ttf`;
+
+  try {
+    console.log(`[svg-text-to-path] Downloading font: ${fontFamily}...`);
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.error(`[svg-text-to-path] Failed to download font: ${response.status}`);
+      return false;
+    }
+    const buffer = await response.arrayBuffer();
+    mkdirSync(dirname(destPath), { recursive: true });
+    writeFileSync(destPath, Buffer.from(buffer));
+    console.log(`[svg-text-to-path] Downloaded font to: ${destPath}`);
+    return true;
+  } catch (err) {
+    console.error(`[svg-text-to-path] Failed to download font:`, err);
+    return false;
+  }
+}
+
+// text-to-svg uses callback-based API, so we promisify it
+function loadTextToSVG(fontPath: string): Promise<TextToSVGInstance> {
+  return new Promise((resolve, reject) => {
+    // Dynamic import for ESM compatibility
+    import('text-to-svg').then((module) => {
+      const TextToSVG = module.default;
+      TextToSVG.load(fontPath, (err: Error | null, textToSVG: TextToSVGInstance) => {
+        if (err) reject(err);
+        else resolve(textToSVG);
+      });
+    });
+  });
+}
+
+interface FontConfig {
+  family: string;
+  path: string;
+}
+
+interface PluginOptions {
+  /** Map of font-family names to font file paths */
+  fonts: FontConfig[];
+  /** Padding around the glyph (default: 40) */
+  padding?: number;
+}
+
+/**
+ * Vite plugin to convert SVG <text> elements to <path> during build.
+ * Keeps <text> in public/ for development, outputs <path> in dist/ for production.
+ */
+export function svgTextToPath(options: PluginOptions): Plugin {
+  const { fonts, padding = 40 } = options;
+  const fontInstances = new Map<string, TextToSVGInstance>();
+  let initialized = false;
+
+  async function initFonts(root: string) {
+    if (initialized) return;
+
+    for (const font of fonts) {
+      const fontPath = join(root, font.path);
+
+      // Download font if it doesn't exist
+      if (!existsSync(fontPath)) {
+        console.log(`[svg-text-to-path] Font not found locally, downloading...`);
+        const downloaded = await downloadFont(font.family, fontPath);
+        if (!downloaded) {
+          console.warn(`[svg-text-to-path] Skipping font: ${font.family}`);
+          continue;
+        }
+      }
+
+      try {
+        const instance = await loadTextToSVG(fontPath);
+        fontInstances.set(font.family.toLowerCase(), instance);
+        console.log(`[svg-text-to-path] Loaded font: ${font.family}`);
+      } catch (err) {
+        console.error(`[svg-text-to-path] Failed to load font ${font.family}:`, err);
+      }
+    }
+    initialized = true;
+  }
+
+  function convertTextToPath(svgContent: string): string {
+    // Match <text> elements with style containing font-family and fill
+    const textRegex = /<text[^>]*style="([^"]*)"[^>]*>([^<]*)<\/text>/g;
+
+    return svgContent.replace(textRegex, (match, style: string, textContent: string) => {
+      // Parse style attributes
+      const fontFamilyMatch = style.match(/font-family:\s*([^;]+)/);
+      const fontSizeMatch = style.match(/font-size:\s*(\d+(?:\.\d+)?)/);
+      const fillMatch = style.match(/fill:\s*([^;]+)/);
+
+      if (!fontFamilyMatch || !fontSizeMatch) {
+        console.warn('[svg-text-to-path] Missing font-family or font-size in:', match);
+        return match;
+      }
+
+      const fontFamily = fontFamilyMatch[1].trim().toLowerCase();
+      const fill = fillMatch ? fillMatch[1].trim() : '#000000';
+      const letter = textContent.trim();
+
+      const textToSVG = fontInstances.get(fontFamily);
+      if (!textToSVG) {
+        console.warn(`[svg-text-to-path] Font not loaded: ${fontFamily}`);
+        return match;
+      }
+
+      // Extract viewBox to get dimensions
+      const viewBoxMatch = svgContent.match(/viewBox="0 0 (\d+) (\d+)"/);
+      const viewBoxSize = viewBoxMatch ? parseInt(viewBoxMatch[1]) : 500;
+
+      // Calculate centered position
+      const availableSize = viewBoxSize - padding * 2;
+      const refSize = 100;
+      const metrics = textToSVG.getMetrics(letter, { fontSize: refSize });
+
+      const scaleX = availableSize / metrics.width;
+      const scaleY = availableSize / metrics.height;
+      const scale = Math.min(scaleX, scaleY);
+      const fontSize = refSize * scale;
+
+      const finalMetrics = textToSVG.getMetrics(letter, { fontSize });
+      const x = (viewBoxSize - finalMetrics.width) / 2 - finalMetrics.x;
+      const y = (viewBoxSize - finalMetrics.height) / 2 - finalMetrics.y;
+
+      const pathData = textToSVG.getD(letter, { fontSize, x, y });
+
+      return `<path d="${pathData}" fill="${fill}"/>`;
+    });
+  }
+
+  let config: ResolvedConfig;
+
+  function processDirectory(dir: string) {
+    if (!existsSync(dir)) return;
+
+    const entries = readdirSync(dir);
+    for (const entry of entries) {
+      const fullPath = join(dir, entry);
+      const stat = statSync(fullPath);
+
+      if (stat.isDirectory()) {
+        processDirectory(fullPath);
+      } else if (entry.endsWith('.svg')) {
+        const content = readFileSync(fullPath, 'utf-8');
+        if (content.includes('<text')) {
+          const converted = convertTextToPath(content);
+          writeFileSync(fullPath, converted, 'utf-8');
+          console.log(`[svg-text-to-path] Converted: ${entry}`);
+        }
+      }
+    }
+  }
+
+  return {
+    name: 'vite-svg-text-to-path',
+    apply: 'build', // Only run during build
+
+    async configResolved(resolvedConfig) {
+      config = resolvedConfig;
+      await initFonts(config.root);
+    },
+
+    // Process SVG files after they've been copied to dist
+    closeBundle() {
+      const outDir = join(config.root, config.build.outDir);
+      processDirectory(outDir);
+    },
+  };
+}

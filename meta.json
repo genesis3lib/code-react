@@ -9,7 +9,9 @@
       "cicd"
     ],
     "type": "react",
-    "providers": ["aws"],
+    "providers": [
+      "aws"
+    ],
     "description": "Modern React application with TypeScript and Vite",
     "version": "1.0.0",
     "author": "Genesis Team",
@@ -25,10 +27,17 @@
       "key": "reactVersion",
       "label": "React Version",
       "type": "select",
-      "options": ["18", "19"],
+      "options": [
+        "18",
+        "19"
+      ],
       "optionNotes": {
-        "18": { "notes": "Stable LTS - broad ecosystem compatibility" },
-        "19": { "notes": "Latest - recommended for new projects" }
+        "18": {
+          "notes": "Stable LTS - broad ecosystem compatibility"
+        },
+        "19": {
+          "notes": "Latest - recommended for new projects"
+        }
       },
       "default": "19",
       "required": true,
@@ -48,15 +57,49 @@
       "key": "buildTool",
       "label": "Build Tool",
       "type": "select",
-      "options": ["vite", "create-react-app"],
+      "options": [
+        "vite",
+        "create-react-app"
+      ],
       "optionNotes": {
-        "vite": { "notes": "Fast, modern - recommended" },
-        "create-react-app": { "notes": "Legacy, slower builds" }
+        "vite": {
+          "notes": "Fast, modern - recommended"
+        },
+        "create-react-app": {
+          "notes": "Legacy, slower builds"
+        }
       },
       "default": "vite",
       "required": true,
       "description": "Build tool for the React application",
       "category": "build"
+    },
+    {
+      "key": "brandFont",
+      "label": "Brand Font",
+      "type": "font",
+      "default": "Inter",
+      "required": false,
+      "description": "Google Font for brand identity (logo, site name)",
+      "category": "branding"
+    },
+    {
+      "key": "brandColorLight",
+      "label": "Brand Color (Light Theme)",
+      "type": "color",
+      "default": "#0f172a",
+      "required": false,
+      "description": "Brand color for light backgrounds",
+      "category": "branding"
+    },
+    {
+      "key": "brandColorDark",
+      "label": "Brand Color (Dark Theme)",
+      "type": "color",
+      "default": "#f0f0f0",
+      "required": false,
+      "description": "Brand color for dark backgrounds",
+      "category": "branding"
     }
   ],
   "dependencies": {
@@ -84,7 +127,8 @@
         "vite": "^5.0.0",
         "@tailwindcss/postcss": "^4.1.17",
         "autoprefixer": "^10.4.22",
-        "postcss": "^8.5.6"
+        "postcss": "^8.5.6",
+        "text-to-svg": "^3.1.5"
       }
     }
   },

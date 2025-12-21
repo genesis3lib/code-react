@@ -1,6 +1,8 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family={{brandFontEncoded}}&display=swap');
 
 @theme {
+  --font-brand: '{{brandFont}}', sans-serif;
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -80,5 +82,11 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+  }
+}
+
+@layer utilities {
+  .font-brand {
+    font-family: var(--font-brand);
   }
 }

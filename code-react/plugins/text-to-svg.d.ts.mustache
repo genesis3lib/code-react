@@ -1,0 +1,22 @@
+declare module 'text-to-svg' {
+  export interface TextToSVGMetrics {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    ascender: number;
+    descender: number;
+  }
+
+  export interface TextToSVGInstance {
+    getMetrics(text: string, options: { fontSize: number }): TextToSVGMetrics;
+    getD(text: string, options: { fontSize: number; x: number; y: number }): string;
+  }
+
+  interface TextToSVGStatic {
+    load(fontPath: string, callback: (err: Error | null, instance: TextToSVGInstance) => void): void;
+  }
+
+  const TextToSVG: TextToSVGStatic;
+  export default TextToSVG;
+}

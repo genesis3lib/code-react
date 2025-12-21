@@ -1,10 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
+import { svgTextToPath } from './plugins/vite-svg-text-to-path'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    svgTextToPath({
+      fonts: [
+        { family: '{{brandFont}}', path: 'fonts/{{brandFontSlug}}-Regular.ttf' },
+      ],
+      padding: 40,
+    }),
+  ],
   // Base path for deployment - defaults to '/' for root deployments
   // Set VITE_BASE env var for subdirectory deployments (e.g., GitHub Pages)
   base: process.env.VITE_BASE || '/',
